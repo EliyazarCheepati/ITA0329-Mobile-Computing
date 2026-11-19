@@ -1,0 +1,56 @@
+20: Code Division Multiple Access (CDMA) – Spreading and Despreading
+Aim: To demonstrate CDMA signal spreading and despreading using a spreading code.
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Original data bits
+data = np.array([1, 0, 1, 1])
+
+# Spreading code
+code = np.array([1, -1, 1, -1])
+
+# Convert bits into +1 and -1
+data_signal = np.where(data == 1, 1, -1)
+
+# Spreading
+spread_signal = np.repeat(data_signal, len(code)) * np.tile(code, len(data))
+
+print("Original Data:", data)
+print("Spreading Code:", code)
+print("Spread Signal:", spread_signal)
+
+# Despreading
+despread_data = []
+
+for i in range(len(data)):
+    segment = spread_signal[i * len(code):(i + 1) * len(code)]
+    correlation = np.sum(segment * code)
+
+    if correlation > 0:
+        despread_data.append(1)
+    else:
+        despread_data.append(0)
+
+print("Despread Data:", despread_data)
+
+# Plot original data
+plt.subplot(3, 1, 1)
+plt.step(range(len(data)), data, where='mid')
+plt.title("Original Data")
+plt.grid(True)
+
+# Plot spreading code
+plt.subplot(3, 1, 2)
+plt.step(range(len(code)), code, where='mid')
+plt.title("Spreading Code")
+plt.grid(True)
+
+# Plot spread signal
+plt.subplot(3, 1, 3)
+plt.step(range(len(spread_signal)), spread_signal, where='mid')
+plt.title("Spread Signal")
+plt.xlabel("Chip Index")
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()

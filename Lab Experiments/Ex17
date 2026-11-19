@@ -1,0 +1,38 @@
+17: Frequency (Co-channel) Reuse – Cluster Size, Capacity and S/I
+Aim: To calculate cluster size, frequency reuse distance, system capacity, and signal-to-interference ratio for different frequency reuse patterns.
+
+import math
+
+# Input parameters
+i = 2
+j = 1
+cell_radius = 1  # km
+total_channels = 280
+path_loss_exponent = 4
+
+# Cluster size
+N = i**2 + i*j + j**2
+
+# Frequency reuse distance
+D = math.sqrt(3 * N) * cell_radius
+
+# Number of co-channel interferers
+interferers = 6
+
+# Signal to Interference Ratio
+S_I = (D / cell_radius)**path_loss_exponent / interferers
+
+S_I_dB = 10 * math.log10(S_I)
+
+# Channels per cell
+channels_per_cell = total_channels // N
+
+# Capacity per cluster
+cluster_capacity = channels_per_cell * N
+
+print("Cluster Size (N):", N)
+print("Reuse Distance:", round(D, 2), "km")
+print("Channels per Cell:", channels_per_cell)
+print("Cluster Capacity:", cluster_capacity, "channels")
+print("S/I Ratio:", round(S_I, 2))
+print("S/I Ratio in dB:", round(S_I_dB, 2), "dB")

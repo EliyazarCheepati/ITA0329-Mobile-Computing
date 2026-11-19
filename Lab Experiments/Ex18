@@ -1,0 +1,31 @@
+18: Call Blocking Probability using the Erlang B Formula
+Aim: To calculate call blocking probability using the Erlang B formula for different numbers of channels.
+import matplotlib.pyplot as plt
+
+def erlang_b(A, C):
+    B = 1.0
+
+    for i in range(1, C + 1):
+        B = (A * B) / (i + A * B)
+
+    return B
+
+# Traffic intensity in Erlangs
+traffic = 10
+
+channels = list(range(1, 21))
+blocking_probabilities = []
+
+for C in channels:
+    B = erlang_b(traffic, C)
+    blocking_probabilities.append(B)
+
+    print(f"Channels: {C}, Blocking Probability: {B:.4f}")
+
+# Plot graph
+plt.plot(channels, blocking_probabilities, marker='o')
+plt.xlabel("Number of Channels")
+plt.ylabel("Call Blocking Probability")
+plt.title("Erlang B Formula")
+plt.grid(True)
+plt.show()

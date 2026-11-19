@@ -1,0 +1,39 @@
+19: Handoff Simulation with Hysteresis
+Aim: To simulate handoff between two base stations using signal strength and hysteresis.
+import matplotlib.pyplot as plt
+
+# Signal strength values
+BS1 = [90, 85, 80, 75, 70, 65, 60, 55, 50, 45]
+BS2 = [40, 45, 50, 55, 60, 65, 70, 75, 80, 85]
+
+hysteresis = 5
+
+current_station = "BS1"
+handoff_points = []
+
+for i in range(len(BS1)):
+    if current_station == "BS1":
+        if BS2[i] > BS1[i] + hysteresis:
+            current_station = "BS2"
+            handoff_points.append(i)
+
+    elif current_station == "BS2":
+        if BS1[i] > BS2[i] + hysteresis:
+            current_station = "BS1"
+            handoff_points.append(i)
+
+    print(f"Time {i}: BS1 = {BS1[i]}, BS2 = {BS2[i]}, Connected to {current_station}")
+
+# Plot signal strength
+plt.plot(BS1, marker='o', label="BS1")
+plt.plot(BS2, marker='o', label="BS2")
+
+for point in handoff_points:
+    plt.axvline(point, color='red', linestyle='--')
+
+plt.xlabel("Time")
+plt.ylabel("Signal Strength")
+plt.title("Handoff Simulation with Hysteresis")
+plt.legend()
+plt.grid(True)
+plt.show()

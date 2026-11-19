@@ -1,0 +1,78 @@
+21: Effect of OFDMA Downlink Scheduler on User Throughput and Fairness
+Aim: To compare Round Robin and Proportional Fair scheduling algorithms in an OFDMA wireless network based on throughput and fairness.
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Simulation parameters
+users = 5
+resource_blocks = 100
+time_slots = 100
+
+np.random.seed(42)
+
+# Random channel quality for each user
+channel = np.random.rand(time_slots, resource_blocks, users)
+
+# Calculate achievable data rate
+rate = np.log2(1 + 10 * channel)
+
+# Round Robin scheduling
+rr_throughput = np.zeros(users)
+
+for t in range(time_slots):
+    for rb in range(resource_blocks):
+        user = (t * resource_blocks + rb) % users
+        rr_throughput[user] += rate[t, rb, user]
+
+# Proportional Fair scheduling
+pf_throughput = np.zeros(users)
+average_rate = np.ones(users)
+
+for t in range(time_slots):
+    for rb in range(resource_blocks):
+        metric = rate[t, rb] / average_rate
+        user = np.argmax(metric)
+
+        pf_throughput[user] += rate[t, rb, user]
+        average_rate = 0.9 * average_rate + 0.1 * rate[t, rb]
+
+# Jain's Fairness Index
+def fairness(values):
+    return (np.sum(values)**2) / (len(values) * np.sum(values**2))
+
+rr_fairness = fairness(rr_throughput)
+pf_fairness = fairness(pf_throughput)
+
+# Display results
+print("Round Robin Throughput:", rr_throughput)
+print("Proportional Fair Throughput:", pf_throughput)
+
+print("\nRound Robin Fairness:", round(rr_fairness, 4))
+print("Proportional Fair Fairness:", round(pf_fairness, 4))
+
+# Throughput comparison
+plt.bar(range(users), rr_throughput, label="Round Robin")
+plt.xlabel("User")
+plt.ylabel("Throughput")
+plt.title("Round Robin Throughput")
+plt.legend()
+plt.grid(axis='y')
+plt.show()
+
+plt.bar(range(users), pf_throughput, label="Proportional Fair", color='orange')
+plt.xlabel("User")
+plt.ylabel("Throughput")
+plt.title("Proportional Fair Throughput")
+plt.legend()
+plt.grid(axis='y')
+plt.show()
+
+# Fairness comparison
+plt.bar(["Round Robin", "Proportional Fair"],
+        [rr_fairness, pf_fairness])
+
+plt.ylabel("Jain's Fairness Index")
+plt.title("Scheduler Fairness Comparison")
+plt.ylim(0, 1.1)
+plt.grid(axis='y')
+plt.show()

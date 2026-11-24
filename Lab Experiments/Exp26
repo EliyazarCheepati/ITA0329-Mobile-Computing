@@ -1,0 +1,4 @@
+26. Capturing Simulation Traffic in Wireshark
+Aim
+To record the packets of an OMNeT++ simulation in .pcap files, to open them in Wireshark and to verify
+the protocol behaviour and the delay measured by the simulator.

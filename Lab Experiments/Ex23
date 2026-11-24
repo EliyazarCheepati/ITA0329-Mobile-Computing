@@ -1,0 +1,3 @@
+23. Cellular Protocol Analysis with Wireshark (GSM, GTP, S1AP, NGAP)
+To analyse sample captures of GSM, GTP, S1AP and NGAP traffic with Wireshark and to identify the
+interfaces, the transport protocols, the procedures and the identifiers.

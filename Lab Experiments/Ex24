@@ -1,0 +1,4 @@
+Mobile IP and Mobility Signalling
+Aim
+To observe how a mobile node keeps its session when it moves from its home network to a visited
+network, to verify the Mobile IPv6 signalling in Wireshark and to measure the handover delay.
